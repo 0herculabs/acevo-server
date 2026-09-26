@@ -9,6 +9,19 @@ AUTO_UPDATE="${AUTO_UPDATE:-true}"
 DATA_DIR="${ACEVO_DATA_DIR:-/data}"
 HOME_DIR="${ACEVO_HOME_DIR:-${HOME:-/root}}"
 
+# Pterodactyl injects SERVER_PORT for the primary allocation.
+# AC EVO requires its game TCP and UDP listener to use the same port,
+# so prefer the primary allocation automatically when available.
+if [[ -n "${SERVER_PORT:-}" ]]; then
+  if [[ "${SERVER_PORT}" =~ ^[0-9]+$ ]] && (( SERVER_PORT >= 1 && SERVER_PORT <= 65535 )); then
+    export SERVER_TCP_PORT="${SERVER_PORT}"
+    export SERVER_UDP_PORT="${SERVER_PORT}"
+    echo "Pterodactyl primary allocation detected: using port ${SERVER_PORT} for AC EVO TCP and UDP."
+  else
+    echo "WARNING: Ignoring invalid Pterodactyl SERVER_PORT='${SERVER_PORT}'." >&2
+  fi
+fi
+
 run_server_update() {
   /opt/acevo/scripts/update.sh
 }
