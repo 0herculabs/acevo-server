@@ -167,16 +167,6 @@
             "user_editable": false,
             "rules": "required|string",
             "field_type": "text"
-        },
-        {
-            "name": "Home Directory",
-            "description": "Persistent HOME used by Steam/Proton inside Pterodactyl.",
-            "env_variable": "HOME",
-            "default_value": "/home/container",
-            "user_viewable": false,
-            "user_editable": false,
-            "rules": "required|string",
-            "field_type": "text"
         }
     ]
 }
