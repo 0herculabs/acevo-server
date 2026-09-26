@@ -99,6 +99,16 @@
             "field_type": "text"
         },
         {
+            "name": "Server Name",
+            "description": "Public server name shown in AC EVO.",
+            "env_variable": "SERVER_NAME",
+            "default_value": "AC EVO Dedicated Server",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:128",
+            "field_type": "text"
+        },
+        {
             "name": "Server TCP Port",
             "description": "Game TCP port. Must use the same numeric value as UDP.",
             "env_variable": "SERVER_TCP_PORT",
@@ -156,16 +166,6 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "nullable|string|max:128",
-            "field_type": "text"
-        },
-        {
-            "name": "Data Directory",
-            "description": "Persistent application data directory inside Pterodactyl.",
-            "env_variable": "ACEVO_DATA_DIR",
-            "default_value": "/home/container",
-            "user_viewable": false,
-            "user_editable": false,
-            "rules": "required|string",
             "field_type": "text"
         }
     ]
