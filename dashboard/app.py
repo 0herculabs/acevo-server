@@ -23,7 +23,12 @@ from . import config_io, live, metadata, mods, server_control
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 STATIC_DIR = Path(__file__).resolve().parent / "static"
-DEFAULT_CONFIG_PATH = Path(os.environ.get("ACEVO_DASHBOARD_CONFIG", "/data/server_launcher.json"))
+DEFAULT_CONFIG_PATH = Path(
+    os.environ.get(
+        "ACEVO_DASHBOARD_CONFIG",
+        str(Path(os.environ.get("ACEVO_DATA_DIR", "/data")) / "server_launcher.json"),
+    )
+)
 DEFAULT_PASSWORD_PLACEHOLDER = "change-me"
 
 
