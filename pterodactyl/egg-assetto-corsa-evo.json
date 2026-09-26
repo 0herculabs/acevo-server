@@ -6,7 +6,7 @@
     },
     "exported_at": "2026-09-27T00:00:00+02:00",
     "name": "Assetto Corsa EVO - 0herculabs Pterodactyl",
-    "author": "0herculabs",
+    "author": "info@herculabs.es",
     "description": "Assetto Corsa EVO dedicated server for Pterodactyl. Uses the Pterodactyl-ready image from 0herculabs/acevo-server and stores persistent data under /home/container. No custom Wings mounts are required.",
     "features": null,
     "docker_images": {
