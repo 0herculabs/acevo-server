@@ -6,6 +6,8 @@ set -euo pipefail
 PUID="${PUID:-0}"
 PGID="${PGID:-0}"
 AUTO_UPDATE="${AUTO_UPDATE:-true}"
+DATA_DIR="${ACEVO_DATA_DIR:-/data}"
+HOME_DIR="${ACEVO_HOME_DIR:-${HOME:-/root}}"
 
 run_server_update() {
   /opt/acevo/scripts/update.sh
@@ -39,21 +41,22 @@ main() {
       groupadd -g "${PGID}" acevo
     fi
     if ! getent passwd "${PUID}" > /dev/null; then
-      useradd -u "${PUID}" -g "${PGID}" -d /root -M -s /bin/bash acevo
+      useradd -u "${PUID}" -g "${PGID}" -d "${HOME_DIR}" -M -s /bin/bash acevo
     fi
 
     TARGET_USER="$(getent passwd "${PUID}" | cut -d: -f1)"
     TARGET_GROUP="$(getent group "${PGID}" | cut -d: -f1)"
 
     # Adjust ownership for required directories
-    chown -R "${TARGET_USER}:${TARGET_GROUP}" /data /root /opt/acevo 2>/dev/null || true
+    mkdir -p "${DATA_DIR}" "${HOME_DIR}"
+    chown -R "${TARGET_USER}:${TARGET_GROUP}" "${DATA_DIR}" "${HOME_DIR}" /opt/acevo 2>/dev/null || true
 
-    export HOME=/root
+    export HOME="${HOME_DIR}"
     export USER="${TARGET_USER}"
     exec gosu "${TARGET_USER}" "$0" "$@"
   fi
 
-  mkdir -p /data
+  mkdir -p "${DATA_DIR}" "${HOME_DIR}"
   run_server_update_if_enabled
   prepare_mod_storage
   echo "Starting AC EVO dashboard (container main process) on port ${DASHBOARD_PORT:-8090} ..."
