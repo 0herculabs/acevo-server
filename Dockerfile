@@ -43,9 +43,13 @@ RUN dpkg --add-architecture i386 \
     && chmod +x /usr/local/bin/proton \
     && rm -rf /tmp/proton /tmp/proton.tar.gz /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-WORKDIR /data
+RUN mkdir -p /home/container
 
-ENV PYTHONPATH=/opt/acevo
+WORKDIR /home/container
+
+ENV PYTHONPATH=/opt/acevo \
+    ACEVO_DATA_DIR=/home/container \
+    HOME=/home/container
 EXPOSE 8090
 
 COPY config/ /opt/acevo/config/
