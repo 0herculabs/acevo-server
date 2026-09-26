@@ -6,7 +6,7 @@
 set -euo pipefail
 
 APP_ID=4564210
-SERVER_INSTALL_DIR=/data/server
+SERVER_INSTALL_DIR="${ACEVO_SERVER_INSTALL_DIR:-${ACEVO_DATA_DIR:-/data}/server}"
 DEDICATED_EXE_NAME=AssettoCorsaEVOServer.exe
 LAUNCHER_EXE_NAME=ServerLauncher.exe
 PROTON_BIN=/usr/local/bin/proton
@@ -20,7 +20,7 @@ SERVER_PAYLOAD_PATH=/tmp/acevo-serverconfig.b64
 SEASON_PAYLOAD_PATH=/tmp/acevo-seasondefinition.b64
 PAYLOAD_REPORT_PATH=/tmp/acevo-resolved-env.json
 XDG_RUNTIME_DIR=/tmp/acevo-xdg-runtime
-STEAM_COMPAT_CLIENT_INSTALL_PATH=/root/.steam/steam
+STEAM_COMPAT_CLIENT_INSTALL_PATH="${STEAM_COMPAT_CLIENT_INSTALL_PATH:-${HOME:-/root}/.steam/steam}"
 COMPATDATA_ROOT="${SERVER_INSTALL_DIR}/steamapps/compatdata"
 STEAM_COMPAT_DATA_PATH="${SERVER_INSTALL_DIR}/steamapps/compatdata/${APP_ID}"
 WINEPREFIX="${STEAM_COMPAT_DATA_PATH}/pfx"
