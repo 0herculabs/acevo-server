@@ -21,7 +21,12 @@ from . import live
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 RUN_SERVER_SCRIPT = Path(os.environ.get("ACEVO_RUN_SERVER", str(REPO_ROOT / "scripts" / "run_server.sh")))
-LOG_FILE = Path(os.environ.get("ACEVO_SERVER_LOG", "/data/logs/server.log"))
+LOG_FILE = Path(
+    os.environ.get(
+        "ACEVO_SERVER_LOG",
+        str(Path(os.environ.get("ACEVO_DATA_DIR", "/data")) / "logs" / "server.log"),
+    )
+)
 _TERM_TIMEOUT = 15.0
 _GROUP_EXIT_TIMEOUT = 5.0
 _RESTART_SETTLE_SECONDS = 1.0
