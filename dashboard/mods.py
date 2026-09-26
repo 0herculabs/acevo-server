@@ -22,14 +22,22 @@ _mutation_lock = threading.Lock()
 
 
 def _mods_dir() -> Path:
-    return Path(\n        os.environ.get(\n            "ACEVO_MODS_DIR",\n            str(Path(os.environ.get("ACEVO_DATA_DIR", "/data")) / "mods"),\n        )\n    )
+    return Path(
+        os.environ.get(
+            "ACEVO_MODS_DIR",
+            str(Path(os.environ.get("ACEVO_DATA_DIR", "/data")) / "mods"),
+        )
+    )
 
 
 def _wine_mods_dir() -> Path:
     return Path(
         os.environ.get(
             "ACEVO_WINE_MODS_DIR",
-            str(\n                Path(os.environ.get("ACEVO_DATA_DIR", "/data"))\n                / "server/steamapps/compatdata/4564210/pfx/drive_c/users/steamuser/Saved Games/ACE-Server/mods"\n            ),
+            str(
+                Path(os.environ.get("ACEVO_DATA_DIR", "/data"))
+                / "server/steamapps/compatdata/4564210/pfx/drive_c/users/steamuser/Saved Games/ACE-Server/mods"
+            ),
         )
     )
 
