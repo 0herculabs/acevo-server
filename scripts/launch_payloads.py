@@ -1286,7 +1286,20 @@ def build_server_doc(state: EnvState, cfg: dict, event_type: str, selected_cars:
             allow_empty=True,
         ),
         "max_players": max_players,
-        "allowed_cars_list_full": [selected_car_payload(state, car_name) for car_name in selected_cars],
+        # The official 0.9.1 launcher emits an empty allowed-car list when no
+        # cars are explicitly selected; the native server interprets that as unrestricted.
+        # Match that behavior for the default "all official cars" case to keep the
+        # serverconfig compact and aligned with the official launcher.
+        "allowed_cars_list_full": (
+            []
+            if (
+                state.resolved.get("EVENT_CARS", {}).get("value") == "all"
+                and state.resolved.get("EVENT_CAR_CATEGORY", {}).get("value") == "all"
+                and not state._raw("EVENT_BAN_CARS").strip()
+                and not state._raw("EVENT_BAN_CAR_CATEGORY").strip()
+            )
+            else [selected_car_payload(state, car_name) for car_name in selected_cars]
+        ),
         "type": server_type,
         "cycle": state.boolean("SERVER_CYCLE_ENABLED", bool(defaults["cycle_enabled"])),
         "admin_password": state.string("SERVER_ADMIN_PASSWORD", defaults["admin_password"], allow_empty=True),
