@@ -1520,7 +1520,9 @@ def encode_payload(document: dict) -> str:
     # payloads. Stored DEFLATE blocks keep the standard zlib envelope while
     # avoiding that data-dependent native decoder path.
     encoded = json.dumps(document, separators=(",", ":")).encode("utf-8")
-    compressed = zlib.compress(encoded, level=0)
+    # AC EVO 0.9.1 launchers in active Linux/Wine projects use normal
+    # DEFLATE compression. Use maximum compression to match that framing.
+    compressed = zlib.compress(encoded, level=9)
     return base64.b64encode(struct.pack(">I", len(encoded)) + compressed).decode("ascii")
 
 
