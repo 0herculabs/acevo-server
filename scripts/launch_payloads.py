@@ -27,6 +27,11 @@ FALSE_VALUES = {"0", "false", "no", "n", "off"}
 DEFAULT_SERVER_LAUNCHER_JSON = "/data/server_launcher.json"
 CONFIG_STATE_FILENAME = "dashboard_config_state.json"
 CONFIG_PRIORITIES = {"env", "dashboard"}
+PTERODACTYL_ENV_OVERRIDE_KEYS = {
+    "SERVER_TCP_PORT",
+    "SERVER_UDP_PORT",
+    "SERVER_HTTP_PORT",
+}
 CAR_FILTER_KEYS = {
     "EVENT_CARS",
     "EVENT_CAR_CATEGORY",
@@ -565,6 +570,10 @@ def requested_config_priority(env: dict[str, str]) -> tuple[str, str]:
     try:
         state = _read_json(state_path)
     except FileNotFoundError:
+        launcher_path = Path(str(env.get("SERVER_LAUNCHER_JSON", "")).strip() or DEFAULT_SERVER_LAUNCHER_JSON)
+        pterodactyl_mode = str(env.get("ACEVO_PTERODACTYL", "")).strip().lower() in TRUE_VALUES
+        if pterodactyl_mode and launcher_path.is_file():
+            return "dashboard", "Pterodactyl mode with saved Dashboard configuration"
         return "env", "no saved priority; using env"
     except (OSError, ValueError) as exc:
         return "env", f"invalid priority state {state_path}: {exc}; using env"
@@ -795,6 +804,9 @@ class EnvState:
         self.resolved[key] = {"value": value, "source": source, "note": note}
 
     def source_for(self, key: str) -> str:
+        pterodactyl_mode = str(self.env.get("ACEVO_PTERODACTYL", "")).strip().lower() in TRUE_VALUES
+        if pterodactyl_mode and key in PTERODACTYL_ENV_OVERRIDE_KEYS and key in self.env:
+            return "env"
         if self.priority == "dashboard" and self.launcher.loaded and key in CAR_FILTER_KEYS:
             return "json" if key == "EVENT_CARS" and key in self.json_values else "default"
         if self.priority == "dashboard" and key in self.json_values:
