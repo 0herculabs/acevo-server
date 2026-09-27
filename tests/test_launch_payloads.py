@@ -1106,18 +1106,38 @@ class LaunchPayloadTests(unittest.TestCase):
                 "server_udp_internal_port",
                 "server_http_port",
                 "server_name",
-                "max_players",
-                "cycle",
-                "allowed_cars_list_full",
+                "launch_path",
+                "netcode_update_interval",
                 "driver_password",
                 "spectator_password",
-                "admin_password",
+                "max_players",
+                "allowed_cars_list_full",
                 "type",
-                "tuning_type",
+                "cycle",
+                "admin_password",
+                "pi_min",
+                "pi_max",
+                "property_1",
+                "property_2",
+                "property_3",
+                "entry_list_server_url",
+                "results_post_url",
+                "token",
                 "entry_list_path",
                 "results_path",
+                "tuning_type",
             },
         )
+        self.assertEqual(server_doc["launch_path"], "")
+        self.assertEqual(server_doc["netcode_update_interval"], 55)
+        self.assertEqual(server_doc["pi_min"], 0)
+        self.assertEqual(server_doc["pi_max"], 0)
+        self.assertEqual(server_doc["property_1"], [])
+        self.assertEqual(server_doc["property_2"], [])
+        self.assertEqual(server_doc["property_3"], [])
+        self.assertEqual(server_doc["entry_list_server_url"], "")
+        self.assertEqual(server_doc["results_post_url"], "")
+        self.assertEqual(server_doc["token"], "")
         self.assertIsInstance(season_doc["event"]["track_length"], str)
         self.assertNotIn("max_pit_slot", season_doc["event"])
 
