@@ -24,6 +24,7 @@ from . import metadata
 
 _FALLBACK_TRACK = "Nurburgring|Touristenfahrten|Touristenfahrten Time Attack|19300"
 _NON_DASHBOARD_ENV_KEYS = {"SERVER_LAUNCHER_JSON", "ACEVO_SERVER_INSTALL_DIR"}
+_PTERODACTYL_ENV_KEYS = {"SERVER_TCP_PORT", "SERVER_UDP_PORT", "SERVER_HTTP_PORT"}
 _CAR_FILTER_ENV_KEYS = {
     "EVENT_CARS",
     "EVENT_CAR_CATEGORY",
@@ -614,9 +615,10 @@ def _runtime_env(env: dict | None, config_path: str | os.PathLike | None = None)
 def dashboard_managed_env_keys(cfg: dict | None = None) -> tuple[str, ...]:
     cfg = cfg or lp.load_config()
     external = set(cfg["runtime"]["external_runtime_env"])
-    return tuple(
-        key for key in cfg["supported_key_order"] if key not in _NON_DASHBOARD_ENV_KEYS and key not in external
-    )
+    excluded = set(_NON_DASHBOARD_ENV_KEYS) | external
+    if os.environ.get("ACEVO_PTERODACTYL", "").strip().lower() in {"1", "true", "yes", "y", "on"}:
+        excluded |= _PTERODACTYL_ENV_KEYS
+    return tuple(key for key in cfg["supported_key_order"] if key not in excluded)
 
 
 def _saved_document_available(path: str | os.PathLike) -> bool:
