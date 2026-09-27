@@ -806,7 +806,7 @@ class LaunchPayloadTests(unittest.TestCase):
 
         self.assertTrue(any("selected car 'preset_does_not_exist' is unknown" in warning for warning in warnings))
         self.assertTrue(any("no valid selected cars found" in warning for warning in warnings))
-        self.assertEqual(selected_car_names(server_doc), all_car_names())
+        self.assertEqual(server_doc["allowed_cars_list_full"], [])
 
     def test_server_launcher_json_uses_race_waiting_for_players_values(self):
         document = launcher_document()
@@ -1016,7 +1016,7 @@ class LaunchPayloadTests(unittest.TestCase):
         self.assertEqual(season_doc["weather_type"], "GameModeSelectionWeatherType_CLEAR")
 
         self.assertTrue(any("no valid cars found" in warning for warning in warnings))
-        self.assertEqual(selected_car_names(server_doc), all_car_names())
+        self.assertEqual(server_doc["allowed_cars_list_full"], [])
 
     def test_unknown_env_keys_are_reported(self):
         _, _, warnings = launch_payloads.build_documents(
@@ -1165,11 +1165,10 @@ class LaunchPayloadTests(unittest.TestCase):
         self.assertTrue(server_doc["cycle"])
         self.assertEqual(server_doc["max_players"], 20)
 
-    def test_default_car_selection_is_all(self):
+    def test_default_car_selection_is_unrestricted(self):
         server_doc, _, warnings, report = launch_payloads.build_documents_with_report({})
         self.assertEqual(warnings, [])
-        self.assertEqual(selected_car_names(server_doc), all_car_names())
-        self.assertEqual(len(server_doc["allowed_cars_list_full"]), 100)
+        self.assertEqual(server_doc["allowed_cars_list_full"], [])
         self.assertEqual(resolved(report, "EVENT_CARS")["value"], "all")
         self.assertEqual(resolved(report, "EVENT_CARS")["source"], "default")
         self.assertEqual(resolved(report, "EVENT_CAR_CATEGORY")["value"], "all")
@@ -1189,7 +1188,7 @@ class LaunchPayloadTests(unittest.TestCase):
 
         self.assertTrue(any("EVENT_CAR_CATEGORY" in warning for warning in warnings))
         self.assertTrue(any("no valid cars found" in warning for warning in warnings))
-        self.assertEqual(selected_car_names(server_doc), all_car_names())
+        self.assertEqual(server_doc["allowed_cars_list_full"], [])
 
     def test_ban_cars_removes_matching_env_tokens_from_all(self):
         server_doc, _, warnings = launch_payloads.build_documents(
