@@ -1062,7 +1062,7 @@ class LaunchPayloadTests(unittest.TestCase):
         declared_length = struct.unpack(">I", raw[:4])[0]
         expected_json = json.dumps(server_doc, separators=(",", ":")).encode("utf-8")
         self.assertEqual(declared_length, len(expected_json))
-        self.assertEqual(raw[4:6], b"x\x01")
+        self.assertEqual(raw[4:6], b"x\xda")
 
         decoded = launch_payloads.decode_payload(payload)
         self.assertEqual(decoded, server_doc)
