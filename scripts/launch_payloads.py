@@ -1277,44 +1277,25 @@ def build_server_doc(state: EnvState, cfg: dict, event_type: str, selected_cars:
         "server_udp_internal_port": udp_port,
         "server_http_port": http_port,
         "server_name": server_name,
-        "launch_path": "",
-        "netcode_update_interval": 55,
+        "max_players": max_players,
+        "cycle": state.boolean("SERVER_CYCLE_ENABLED", bool(defaults["cycle_enabled"])),
+        "allowed_cars_list_full": [selected_car_payload(state, car_name) for car_name in selected_cars],
         "driver_password": state.string("SERVER_DRIVER_PASSWORD", defaults["driver_password"], allow_empty=True),
         "spectator_password": state.string(
             "SERVER_SPECTATOR_PASSWORD",
             defaults["spectator_password"],
             allow_empty=True,
         ),
-        "max_players": max_players,
-        # The official 0.9.1 launcher emits an empty allowed-car list when no
-        # cars are explicitly selected; the native server interprets that as unrestricted.
-        # Match that behavior for the default "all official cars" case to keep the
-        # serverconfig compact and aligned with the official launcher.
-        "allowed_cars_list_full": (
-            []
-            if (
-                state.resolved.get("EVENT_CARS", {}).get("value") == "all"
-                and state.resolved.get("EVENT_CAR_CATEGORY", {}).get("value") == "all"
-                and not state._raw("EVENT_BAN_CARS").strip()
-                and not state._raw("EVENT_BAN_CAR_CATEGORY").strip()
-            )
-            else [selected_car_payload(state, car_name) for car_name in selected_cars]
-        ),
-        "type": server_type,
-        "cycle": state.boolean("SERVER_CYCLE_ENABLED", bool(defaults["cycle_enabled"])),
         "admin_password": state.string("SERVER_ADMIN_PASSWORD", defaults["admin_password"], allow_empty=True),
-        "pi_min": 0,
-        "pi_max": 0,
-        "property_1": [],
-        "property_2": [],
-        "property_3": [],
-        "entry_list_server_url": entry_list_url,
-        "results_post_url": results_post_url,
-        "token": "",
+        "type": server_type,
+        "tuning_type": tuning_type,
         "entry_list_path": state.string("SERVER_ENTRY_LIST_PATH", "", allow_empty=True),
         "results_path": state.string("SERVER_RESULTS_PATH", "", allow_empty=True),
-        "tuning_type": tuning_type,
     }
+    if entry_list_url:
+        document["entry_list_server_url"] = entry_list_url
+    if results_post_url:
+        document["results_post_url"] = results_post_url
     return document
 
 
@@ -1533,9 +1514,7 @@ def encode_payload(document: dict) -> str:
     # payloads. Stored DEFLATE blocks keep the standard zlib envelope while
     # avoiding that data-dependent native decoder path.
     encoded = json.dumps(document, separators=(",", ":")).encode("utf-8")
-    # AC EVO 0.9.1 launchers in active Linux/Wine projects use normal
-    # DEFLATE compression. Use maximum compression to match that framing.
-    compressed = zlib.compress(encoded, level=9)
+    compressed = zlib.compress(encoded, level=0)
     return base64.b64encode(struct.pack(">I", len(encoded)) + compressed).decode("ascii")
 
 
