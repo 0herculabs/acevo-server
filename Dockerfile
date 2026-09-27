@@ -49,6 +49,8 @@ WORKDIR /home/container
 
 ENV PYTHONPATH=/opt/acevo \
     ACEVO_DATA_DIR=/home/container \
+    SERVER_LAUNCHER_JSON=/home/container/server_launcher.json \
+    ACEVO_PTERODACTYL=true \
     HOME=/home/container
 EXPOSE 8090
 
