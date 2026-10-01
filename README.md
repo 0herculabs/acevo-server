@@ -128,6 +128,7 @@ Set or adjust in `.env` or in the docker compose file.
 | Name                                             | Default                        | Type    | Description                                                                                                    |
 | ------------------------------------------------ | ------------------------------ | ------- | -------------------------------------------------------------------------------------------------------------- |
 | `ACEVO_FORCE_SOFTWARE_RENDERING`                 | `true`                         | boolean | Forces Proton/WineD3D and Mesa llvmpipe software rendering for broad no-GPU host compatibility.                |
+| `ACEVO_SERVER_EXTRA_ARGS`                        | empty                          | string  | Extra arguments for `AssettoCorsaEVOServer.exe`, split on spaces, e.g. `-log_debug gameplay` for verbose logs. |
 | `AUTO_START_SERVER`                              | `true`                         | boolean | Start the AC EVO server automatically when the container starts (the dashboard can stop/restart it).           |
 | `AUTO_UPDATE`                                    | `true`                         | boolean | Updates the dedicated server once when the container starts; dashboard server restarts skip the update.        |
 | `DASHBOARD_PASSWORD`                             | empty                          | string  | Web dashboard Basic Auth password; empty disables auth (public). See the Web Dashboard section.                |

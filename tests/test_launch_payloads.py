@@ -1132,6 +1132,13 @@ class LaunchPayloadTests(unittest.TestCase):
         self.assertEqual(warnings_override, [])
         self.assertEqual(resolved(report_override, "ACEVO_FORCE_SOFTWARE_RENDERING")["value"], "false")
 
+    def test_server_extra_args_is_known_runtime_env(self):
+        _, _, warnings, report = launch_payloads.build_documents_with_report(
+            {"ACEVO_SERVER_EXTRA_ARGS": "-log_debug gameplay"}
+        )
+        self.assertEqual(warnings, [])
+        self.assertEqual(resolved(report, "ACEVO_SERVER_EXTRA_ARGS")["value"], "-log_debug gameplay")
+
     def test_invalid_integer_and_boolean_values_fallback(self):
         server_doc, _, warnings = launch_payloads.build_documents(
             {

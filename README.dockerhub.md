@@ -162,6 +162,7 @@ This section is shortened on Docker Hub. See the full table in the GitHub README
 | `AUTO_UPDATE`                           | `true`                         | Container-start update; server restarts skip it.   |
 | `AUTO_START_SERVER`                     | `true`                         | Start the server automatically with the container. |
 | `ACEVO_FORCE_SOFTWARE_RENDERING`        | `true`                         | Enables default no-GPU host compatibility.         |
+| `ACEVO_SERVER_EXTRA_ARGS`               | empty                          | Extra arguments for the dedicated server exe.      |
 | `DASHBOARD_PORT`                        | `8090`                         | Web dashboard port.                                |
 | `DASHBOARD_USER`                        | `admin`                        | Web dashboard Basic Auth username.                 |
 | `DASHBOARD_PASSWORD`                    | empty                          | Web dashboard Basic Auth password; empty = public. |

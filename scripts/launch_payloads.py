@@ -132,7 +132,8 @@ RUNTIME_KEYS = {
         "SERVER_ADMIN_PASSWORD",
     ],
     "external_runtime_env": {
-        "ACEVO_FORCE_SOFTWARE_RENDERING": {"default": "true", "note": "used by start.sh Proton rendering mode"}
+        "ACEVO_FORCE_SOFTWARE_RENDERING": {"default": "true", "note": "used by start.sh Proton rendering mode"},
+        "ACEVO_SERVER_EXTRA_ARGS": {"default": "", "note": "appended by run_server.sh to the dedicated server command line"},
     },
 }
 

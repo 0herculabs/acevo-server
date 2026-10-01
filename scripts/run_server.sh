@@ -15,6 +15,8 @@ XVFB_BIN=/usr/bin/Xvfb
 XVFB_DISPLAY="${XVFB_DISPLAY:-:99}"
 XVFB_SERVER_ARGS=(-screen 0 1024x768x24 -nolisten tcp -ac +extension GLX +render)
 ACEVO_FORCE_SOFTWARE_RENDERING="${ACEVO_FORCE_SOFTWARE_RENDERING:-true}"
+# Extra command-line arguments for AssettoCorsaEVOServer.exe, split on whitespace (e.g. "-log_debug gameplay").
+read -r -a ACEVO_SERVER_EXTRA_ARGS_LIST <<< "${ACEVO_SERVER_EXTRA_ARGS:-}"
 PAYLOAD_GENERATOR=/opt/acevo/scripts/launch_payloads.py
 SERVER_PAYLOAD_PATH=/tmp/acevo-serverconfig.b64
 SEASON_PAYLOAD_PATH=/tmp/acevo-seasondefinition.b64
@@ -217,6 +219,9 @@ log_fingerprint() {
 
   echo "Runtime fingerprint: proton='${proton_version}' app_id=${APP_ID} install_dir=${SERVER_INSTALL_DIR} display=${XVFB_DISPLAY}"
   echo "Runtime rendering: ACEVO_FORCE_SOFTWARE_RENDERING=${ACEVO_FORCE_SOFTWARE_RENDERING}"
+  if [[ "${#ACEVO_SERVER_EXTRA_ARGS_LIST[@]}" -gt 0 ]]; then
+    echo "Runtime extra server args: ${ACEVO_SERVER_EXTRA_ARGS_LIST[*]}"
+  fi
 }
 
 run_payload_generator() {
@@ -289,7 +294,8 @@ run_dedicated_server() {
       run_gracefully "${dedicated_name}" \
         "${PROTON_BIN}" runinprefix "./${dedicated_name}" \
         -serverconfig "${SERVER_PAYLOAD}" \
-        -seasondefinition "${SEASON_PAYLOAD}"
+        -seasondefinition "${SEASON_PAYLOAD}" \
+        "${ACEVO_SERVER_EXTRA_ARGS_LIST[@]}"
     )
     dedicated_exit=$?
     set -e
